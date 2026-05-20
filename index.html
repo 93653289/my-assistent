@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Jarvis AI</title>
+
+<style>
+
+body{
+background:black;
+font-family:Arial;
+text-align:center;
+color:white;
+padding-top:30px;
+}
+
+h1{
+color:cyan;
+font-size:40px;
+text-shadow:0 0 20px cyan;
+}
+
+input{
+width:80%;
+padding:15px;
+font-size:18px;
+border-radius:15px;
+border:none;
+outline:none;
+background:#111;
+color:white;
+box-shadow:0 0 15px cyan;
+}
+
+button{
+margin-top:15px;
+padding:12px 25px;
+font-size:18px;
+border:none;
+border-radius:15px;
+background:cyan;
+color:black;
+font-weight:bold;
+box-shadow:0 0 15px cyan;
+}
+
+#answer{
+margin-top:30px;
+font-size:24px;
+color:lime;
+text-shadow:0 0 10px lime;
+padding:10px;
+}
+
+.chat-box{
+width:90%;
+margin:auto;
+margin-top:20px;
+padding:15px;
+background:#111;
+border-radius:20px;
+box-shadow:0 0 20px cyan;
+min-height:200px;
+overflow:auto;
+}
+
+.user{
+color:yellow;
+margin:10px;
+}
+
+.ai{
+color:lime;
+margin:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🤖 JARVIS AI</h1>
+
+<input
+type="text"
+id="userInput"
+placeholder="Ask anything...">
+
+<br>
+
+<button onclick="reply()">
+Send
+</button>
+
+<button onclick="startListening()">
+🎤 Speak
+</button>
+
+<div class="chat-box" id="chatBox">
+</div>
+
+<p id="answer"></p>
+
+<script>
+
+function speakText(text){
+
+let speech =
+new SpeechSynthesisUtterance();
+
+speech.text = text;
+
+speech.lang = "hi-IN";
+
+speech.volume = 1;
+
+speech.rate = 1;
+
+speech.pitch = 1;
+
+window.speechSynthesis.speak(speech);
+
+}
+
+function addChat(userText, aiText){
+
+let chatBox =
+document.getElementById("chatBox");
+
+chatBox.innerHTML +=
+"<div class='user'>🧑 You: "
++ userText +
+"</div>";
+
+chatBox.innerHTML +=
+"<div class='ai'>🤖 AI: "
++ aiText +
+"</div>";
+
+}
+
+function reply(){
+
+let input =
+document.getElementById("userInput")
+.value.trim().toLowerCase();
+
+let response =
+"I don't understand 😅";
+
+if(input.includes("hello")){
+response = "Hello Boss 😎";
+}
+
+else if(input.includes("your name")){
+response = "I am Jarvis AI 🤖";
+}
+
+else if(input.includes("time")){
+response =
+new Date().toLocaleTimeString();
+}
+
+else if(input.includes("date")){
+response =
+new Date().toLocaleDateString();
+}
+
+else if(input.includes("how are you")){
+response =
+"I am fine Boss 🔥";
+}
+
+else if(input.includes("who made you")){
+response =
+"Mridul Boss created me 😎";
+}
+
+else if(input.includes("bye")){
+response =
+"Goodbye Boss 👋";
+}
+
+else if(input.includes("youtube")){
+window.open("https://youtube.com");
+response =
+"Opening YouTube ▶";
+}
+
+else if(input.includes("google")){
+window.open("https://google.com");
+response =
+"Opening Google 🌍";
+}
+
+else if(input.includes("weather")){
+response =
+"Please connect weather API later 🌦";
+}
+
+else if(input.includes("joke")){
+response =
+"Why did the computer sleep? Because it had too many tabs open 😂";
+}
+
+document.getElementById("answer")
+.innerText = response;
+
+addChat(input, response);
+
+speakText(response);
+
+}
+
+function startListening(){
+
+if (!('webkitSpeechRecognition'
+in window)) {
+
+alert("Speech Recognition not supported");
+
+return;
+
+}
+
+const recognition =
+new webkitSpeechRecognition();
+
+recognition.lang = "en-US";
+
+recognition.continuous = false;
+
+recognition.interimResults = false;
+
+recognition.start();
+
+recognition.onresult =
+function(event){
+
+let text =
+event.results[0][0].transcript;
+
+document.getElementById("userInput")
+.value = text;
+
+reply();
+
+};
+
+recognition.onerror =
+function(){
+
+alert("Mic error occurred");
+
+};
+
+}
+
+</script>
+
+</body>
+
+</html>
